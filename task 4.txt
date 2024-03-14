@@ -1,0 +1,141 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Course {
+    private String code;
+    private String title;
+    private String description;
+    private int capacity;
+    private String schedule;
+
+    public Course(String code, String title, String description, int capacity, String schedule) {
+        this.code = code;
+        this.title = title;
+        this.description = description;
+        this.capacity = capacity;
+        this.schedule = schedule;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+}
+
+class Student {
+    private int id;
+    private String name;
+    private List<String> registeredCourses;
+
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.registeredCourses = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getRegisteredCourses() {
+        return registeredCourses;
+    }
+
+    public void registerCourse(String courseCode) {
+        registeredCourses.add(courseCode);
+    }
+
+    public void dropCourse(String courseCode) {
+        registeredCourses.remove(courseCode);
+    }
+}
+
+class DatabaseManager {
+    private List<Course> courses;
+    private List<Student> students;
+
+    public DatabaseManager() {
+        this.courses = new ArrayList<>();
+        this.students = new ArrayList<>();
+    }
+
+    public void addCourse(Course course) {
+        courses.add(course);
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public Course findCourseByCode(String code) {
+        for (Course course : courses) {
+            if (course.getCode().equals(code)) {
+                return course;
+            }
+        }
+        return null;
+    }
+
+    public Student findStudentById(int id) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+}
+
+public class CourseRegistrationSystem {
+    private static DatabaseManager dbManager = new DatabaseManager();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        initializeData();
+
+        while (true) {
+            System.out.println("\n1. View available courses");
+            System.out.println("2. Register for a course");
+            System.out.println("3. Drop a course");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            int option = scanner.nextInt();
+
+            switch (option) {
+                case 1:
+                    displayAvailableCourses();
+                    break;
+                case 2:
+                    registerCourse();
+                    break;
+                case 3:
+                    dropCourse();
+}

@@ -1,0 +1,82 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Quiz {
+    private Map<String, String[]> questions = new HashMap<>();
+    private int score = 0;
+    private int questionIndex = 0;
+
+    // Constructor to initialize quiz questions
+    public Quiz() {
+        questions.put("What is the capital of France?", new String[]{"A. Paris", "B. London", "C. Berlin", "D. Rome", "A"});
+        questions.put("What is the largest planet in our solar system?", new String[]{"A. Earth", "B. Jupiter", "C. Mars", "D. Venus", "B"});
+        questions.put("Who wrote 'To Kill a Mockingbird'?", new String[]{"A. Ernest Hemingway", "B. Harper Lee", "C. F. Scott Fitzgerald", "D. Mark Twain", "B"});
+        questions.put("Which of the following is not a primary color?", new String[]{"A. Red", "B. Yellow", "C. Green", "D. Blue", "C"});
+        questions.put("What is the chemical symbol for water?", new String[]{"A. H", "B. O", "C. W", "D. H2O", "D"});
+    }
+
+    // Method to display and handle a single question
+    public void displayQuestion(String question, String[] options, String correctAnswer) {
+        System.out.println(question);
+        for (String option : options) {
+            System.out.println(option);
+        }
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("\nTime's up! The correct answer was: " + correctAnswer);
+                questionIndex++;
+                displayNextQuestion();
+            }
+        };
+
+        timer.schedule(task, 10000); // 10 seconds timer
+
+        Scanner scanner = new Scanner(System.in);
+        String userAnswer = scanner.nextLine().toUpperCase();
+        timer.cancel();
+
+        if (userAnswer.equals(correctAnswer)) {
+            score++;
+            System.out.println("Correct!\n");
+        } else {
+            System.out.println("Incorrect!\n");
+        }
+
+        questionIndex++;
+        displayNextQuestion();
+    }
+
+    // Method to display the next question or show the result
+    public void displayNextQuestion() {
+        if (questionIndex < questions.size()) {
+            String[] question = (String[]) questions.keySet().toArray()[questionIndex];
+            String[] options = questions.get(question);
+            String correctAnswer = options[options.length - 1]; // Last element is the correct answer
+            displayQuestion(question[0], options, correctAnswer);
+        } else {
+            System.out.println("Quiz Finished!");
+            System.out.println("Your score: " + score + " out of " + questions.size());
+            int correctAnswers = score;
+            int incorrectAnswers = questions.size() - score;
+            System.out.println("Correct Answers: " + correctAnswers);
+            System.out.println("Incorrect Answers: " + incorrectAnswers);
+        }
+    }
+
+    // Method to start the quiz
+    public void startQuiz() {
+        displayNextQuestion();
+    }
+
+    // Main method to run the quiz
+    public static void main(String[] args) {
+        Quiz quiz = new Quiz();
+        quiz.startQuiz();
+    }
+}
